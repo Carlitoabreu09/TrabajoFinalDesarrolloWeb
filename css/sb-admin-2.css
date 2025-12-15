@@ -238,6 +238,13 @@ button:focus:not(:focus-visible) {
   outline: 0;
 }
 
+.text-primary {
+    color: #007bff !important;
+}
+.bg-gradient-primary {
+    background: linear-gradient(180deg, #007bff 10%, #0056b3 100%) !important;
+}
+
 input,
 button,
 select,
@@ -2357,14 +2364,14 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #139EEE;
+  border-color: #139EEE;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+  background-color: #139EEE;
+  border-color: #139EEE;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -2376,8 +2383,8 @@ fieldset:disabled a.btn {
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
+  background-color: #139EEE;
+  border-color: #139EEE;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
