@@ -1,0 +1,121 @@
+<h2 class="text-center mt-4">Crear Factura</h2>
+
+<div class="container py-4">
+
+  <!-- Botón regresar arriba -->
+  <div class="mb-4">
+    <button class="btn btn-secondary" data-page="facturacion.html">
+      ← Regresar
+    </button>
+  </div>
+
+  <!-- Información del cliente -->
+  <h4 class="mb-3">Información del Cliente</h4>
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <label for="codigoCliente" class="form-label">Código</label>
+      <input type="text" class="form-control" id="codigoCliente" placeholder="Código">
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <button class="btn btn-primary w-100">
+        Buscar <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <div class="col-md-7">
+      <label for="nombreCliente" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="nombreCliente" placeholder="Nombre del cliente">
+    </div>
+  </div>
+
+  <!-- Información del producto -->
+  <h4 class="mb-3">Información del Producto</h4>
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <label for="codigoProducto" class="form-label">Código</label>
+      <input type="text" class="form-control" id="codigoProducto" placeholder="Código">
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <button class="btn btn-primary w-100">
+        Buscar <i class="fas fa-search"></i>
+      </button>
+    </div>
+    <div class="col-md-7">
+      <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+      <input type="text" class="form-control" id="nombreProducto" placeholder="Nombre del producto">
+    </div>
+  </div>
+
+  <!-- Cantidad, Precio y botón Agregar -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <label for="cantidad" class="form-label">Cantidad</label>
+      <input type="number" class="form-control" id="cantidad" placeholder="Cantidad">
+    </div>
+    <div class="col-md-3">
+      <label for="precio" class="form-label">Precio</label>
+      <input type="number" class="form-control" id="precio" placeholder="Precio">
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button class="btn btn-success w-100">
+        Agregar <i class="fas fa-plus-circle"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla de productos seleccionados -->
+  <h4 class="mb-3">Productos Seleccionados</h4>
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-primary">
+        <tr>
+          <th>Código</th>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody id="tablaFactura">
+        <!-- Filas dinámicas -->
+        <tr>
+          <td>001</td>
+          <td>Paracetamol</td>
+          <td>50</td>
+          <td>2</td>
+          <td>100</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón Facturar -->
+<div class="d-flex justify-content-end mb-4">
+  <button class="btn btn-primary btn-lg">
+    Facturar <i class="fas fa-file-invoice-dollar"></i>
+  </button>
+</div>
+
+  <!-- Footer con totales y tipo de factura -->
+  <div class="row border-top pt-4">
+    <div class="col-md-3">
+      <label class="form-label">Subtotal</label>
+      <input type="text" class="form-control" id="subtotal" readonly value="100.00">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">ITBIS</label>
+      <input type="text" class="form-control" id="itbis" readonly value="18.00">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Total</label>
+      <input type="text" class="form-control" id="total" readonly value="118.00">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Tipo de Factura</label>
+      <select class="form-select" id="tipoFactura">
+        <option value="consumidor">Consumidor Final</option>
+        <option value="credito">Crédito Fiscal</option>
+      </select>
+    </div>
+  </div>
+
+</div>

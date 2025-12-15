@@ -1,0 +1,52 @@
+<h2 class="text-center mt-4">Listado de Cliente</h2>
+
+<div class="container py-4">
+
+  <!-- Buscador -->
+  <div class="d-flex justify-content-start align-items-center mb-4">
+    <input type="text" class="form-control me-2" id="buscarCliente" placeholder="Buscar cliente...">
+    <button class="btn btn-primary" id="btnBuscar">
+      BUSCAR 
+    </button>
+  </div>
+
+  <!-- Tabla de clientes -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-primary">
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+          <th>RNC</th>
+        </tr>
+      </thead>
+      <tbody id="tablaClientes">
+        <!-- Aquí se insertarán las filas dinámicamente -->
+        <tr>
+          <td>001</td>
+          <td>Carlos Abreu</td>
+          <td>829-780-5999</td>
+          <td>Bonao</td>
+          <td>100063167</td>
+        </tr>
+        <tr>
+          <td>002</td>
+          <td>Ana Gómez</td>
+          <td>809-555-5678</td>
+          <td>La Vega</td>
+          <td>987654321</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón regresar -->
+  <div class="mt-4">
+    <button class="btn btn-secondary" data-page="clientes.html">
+      ← Regresar
+    </button>
+  </div>
+
+</div>

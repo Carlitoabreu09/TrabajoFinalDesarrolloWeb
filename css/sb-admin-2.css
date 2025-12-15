@@ -2399,6 +2399,19 @@ fieldset:disabled a.btn {
   box-shadow: 0 0 0 0.2rem rgba(105, 136, 228, 0.5);
 }
 
+.input-ovalado {
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease;
+}
+
+.input-ovalado:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
 
 .btn-default {
     color: #fff;

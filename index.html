@@ -181,6 +181,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.text())
             .then(html => {
                 mainContent.innerHTML = html;
+
+                // Reasignar eventos a botones internos
+                assignInternalEvents();
             })
             .catch(err => {
                 mainContent.innerHTML = "<p class='text-danger'>Error al cargar la página.</p>";
@@ -188,17 +191,22 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    // Función para asignar eventos a botones internos
+    function assignInternalEvents() {
+        document.querySelectorAll("[data-page]").forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                e.preventDefault();
+                const page = this.getAttribute("data-page");
+                loadPage(page);
+            });
+        });
+    }
+
     // Cargar la página principal al inicio
     loadPage("principal.html");
 
-    // Asignar evento a los enlaces
-    document.querySelectorAll(".nav-link[data-page]").forEach(link => {
-        link.addEventListener("click", function (e) {
-            e.preventDefault(); // Evita recargar la página
-            const page = this.getAttribute("data-page");
-            loadPage(page);
-        });
-    });
+    // Asignar eventos iniciales a la barra de navegación
+    assignInternalEvents();
 });
 </script>
 

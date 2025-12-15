@@ -1,0 +1,60 @@
+<h2 class="text-center mt-4">Listados de Facturas</h2>
+<div class="container py-4">
+
+  <!-- Buscador -->
+  <div class="d-flex justify-content-start align-items-center mb-4">
+    <input type="text" class="form-control me-2" id="buscarFactura" placeholder="Buscar factura...">
+    <button class="btn btn-primary" id="btnBuscarFactura">
+      BUSCAR
+    </button>
+  </div>
+
+  <!-- Tabla de facturas -->
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-primary">
+        <tr>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Condición</th>
+          <th>PDF</th>
+        </tr>
+      </thead>
+      <tbody id="tablaFacturas">
+        <!-- Filas dinámicas -->
+        <tr>
+          <td>Juan Pérez</td>
+          <td>2025-12-15</td>
+          <td>RD$ 1,250.00</td>
+          <td>Crédito Fiscal</td>
+          <td>
+            <button class="btn btn-danger btn-sm">
+              PDF <i class="fas fa-file-pdf"></i>
+            </button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Ana Gómez</td>
+          <td>2025-12-14</td>
+          <td>RD$ 850.00</td>
+          <td>Consumidor Final</td>
+          <td>
+            <button class="btn btn-danger btn-sm">
+              PDF <i class="fas fa-file-pdf"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón regresar -->
+  <div class="mt-3">
+    <button class="btn btn-secondary" data-page="facturacion.html">
+      ← Regresar
+    </button>
+  </div>
+
+</div>
