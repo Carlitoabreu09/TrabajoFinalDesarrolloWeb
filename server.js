@@ -1,7 +1,7 @@
 import express from "express";
 import { join, dirname } from "path"; // 1. Aquí ya importaste 'join'
 import { fileURLToPath } from "url";
-
+ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -9,6 +9,13 @@ const app = express();
 
 
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Ruta principal
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+/*
 app.get("/", (req, res) => {
     res.sendFile(join(__dirname, 'principal.html')); 
 })
@@ -55,7 +62,6 @@ app.get("/addproductos",(req,res)=>{
     res.sendFile((join(__dirname, 'addproductos.html')));
 })
 
-
 app.get("/productos",(req,res)=>{
     res.sendFile((join(__dirname, 'productos.html')));
 })
@@ -64,7 +70,7 @@ app.get("/facturacion",(req,res)=>{
     res.sendFile((join(__dirname, 'facturacion.html')));
 })
 
-
+*/
 
 app.set("port", process.env.PORT || 3000);
 
