@@ -1,24 +1,3 @@
-// conecion sql server 
-const sql = require('mssql');
-const config = {
-    user: 'sa',
-    password: '1234',
-    server: 'localhost',
-    database: 'NEOPharmTechDB',
-    options: {
-        encrypt: true, // Use this if you're on Windows Azure
-        trustServerCertificate: true // Change to true for local dev / self-signed certs
-    }
-};
-
-sql.connect(config).then(pool => {
-    if (pool.connected) {
-        console.log('Connected to SQL Server');
-    }   
-}).catch(err => {
-    console.error('SQL Connection Error: ', err);
-});
-
 //#region controllers ------------------------------------------------------------------
 
 //create  user controller
@@ -278,7 +257,3 @@ app.get('/ventas', async (req, res) => {
 });
 
 //#endregion routes ------------------------------------------------------------------
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}/`);
-});
