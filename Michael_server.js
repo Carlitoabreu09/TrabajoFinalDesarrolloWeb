@@ -253,7 +253,7 @@ app.get('/ventas', async (req, res) => {
     res.json(ventas);
 
     //render ventas.html
-    res.sendFile(path.join(__dirname, 'public', 'ventas.html'));
+    res.sendFile(path.join(__dirname, 'public', 'facturacion.html'));
 });
 
 //#endregion routes ------------------------------------------------------------------
