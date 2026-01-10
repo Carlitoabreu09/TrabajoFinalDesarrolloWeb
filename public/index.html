@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("[data-page]").forEach(btn => {
             btn.addEventListener("click", function (e) {
                 e.preventDefault();
-                const page = this.getAttribute("data-page");
+                 page = this.getAttribute("data-page");
                 loadPage(page);
             });
         });
