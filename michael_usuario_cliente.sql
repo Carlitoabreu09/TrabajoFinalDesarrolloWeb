@@ -1,94 +1,210 @@
-sql
--- Crear la tabla Clientes
+
+------------------- michael ---------------------------------------
+-- tabla de usuarios    
+Create Table Usuarios (
+    UsuarioID INT IDENTITY(1,1) PRIMARY KEY,
+    NombreUsuario NVARCHAR(50) UNIQUE NOT NULL,
+    ContrasenaHash NVARCHAR(255) NOT NULL,
+    Rol NVARCHAR(20) NOT NULL
+);
+GO
+
+
+-- Tabla Empleados
+CREATE TABLE Empleados (
+    EmpleadoID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(50) NOT NULL,
+    Apellido NVARCHAR(50) NOT NULL,
+    Rol NVARCHAR(30) 
+);
+GO
+
+-- tavbla Clientes
 CREATE TABLE Clientes (
-    ClienteID INT PRIMARY KEY IDENTITY(1,1),
-    Nombre VARCHAR(50) NOT NULL,
-    Apellido VARCHAR(50) NOT NULL,
-    Email VARCHAR(100) UNIQUE,
-    Telefono VARCHAR(20),
-    Direccion VARCHAR(255)
+    ClienteID INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(50) NOT NULL,
+    Apellido NVARCHAR(50) NOT NULL,
+    Telefono NVARCHAR(20),
+    Email NVARCHAR(100)
 );
+GO
 
--- Crear la tabla Artículos
-CREATE TABLE Artículos (
-    ArticuloID INT PRIMARY KEY IDENTITY(1,1),
-    Nombre VARCHAR(100) NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL,
-    Descripcion TEXT
-);
 
--- Crear la tabla Facturas
-CREATE TABLE Facturas (
-    FacturaID INT PRIMARY KEY IDENTITY(1,1),
-    ClienteID INT NOT NULL,
-    FechaFactura DATE NOT NULL,
-    ImporteTotal DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID)
-);
+-- crud  usarios y  empleados 
 
--- Crear la tabla Facturas_Articulos (Tabla de unión muchos a muchos)
-CREATE TABLE Facturas_Articulos (
-    FacturaID INT NOT NULL,
-    ArticuloID INT NOT NULL,
-    Cantidad INT NOT NULL,
-    PrecioUnitario DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY (FacturaID, ArticuloID)
-);
 
--- Crear la tabla Pagos
-CREATE TABLE Pagos (
-    PagoID INT PRIMARY KEY IDENTITY(1,1),
-    FacturaID INT NOT NULL,
-    ClienteID INT NOT NULL,
-    Importe DECIMAL(10, 2) NOT NULL,
-    FechaPago DATE NOT NULL,
-    MetodoPago VARCHAR(50),
-    FOREIGN KEY (FacturaID) REFERENCES Facturas(FacturaID),
-    FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID)
-);
+-- sp crear usuario
+CREATE PROCEDURE sp_CrearUsuario
+    @NombreUsuario NVARCHAR(50),
+    @Contrasena NVARCHAR(100),
+    @Rol NVARCHAR(20)
+AS
+BEGIN
+    DECLARE @ContrasenaHash NVARCHAR(255);
+    SET @ContrasenaHash = HASHBYTES('SHA2_256', @Contrasena);
 
--- Ejemplo de consultas
+    INSERT INTO Usuarios (NombreUsuario, ContrasenaHash, Rol)
+    VALUES (@NombreUsuario, @ContrasenaHash, @Rol);
+END
+GO
 
--- 1. Insertar un cliente
-INSERT INTO Clientes (Nombre, Apellido, Email, Telefono, Direccion)
-VALUES ('Juan', 'Pérez', 'juan.perez@example.com', '123-456-7890', 'Calle Falsa 123');
+-- sp crear empleado
+CREATE PROCEDURE sp_CrearEmpleado
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @Rol NVARCHAR(30)
+AS
+BEGIN
+    INSERT INTO Empleados (Nombre, Apellido, Rol)
+    VALUES (@Nombre, @Apellido, @Rol);
+END
+GO
 
--- 2. Insertar un artículo
-INSERT INTO Artículos (Nombre, Precio, Descripcion)
-VALUES ('Camiseta', 25.99, 'Camiseta de algodón');
+-- sp obtener empleado por id
+CREATE PROCEDURE sp_ObtenerEmpleadoPorID
+    @EmpleadoID INT
+AS
+BEGIN
+    SELECT *
+    FROM Empleados
+    WHERE EmpleadoID = @EmpleadoID;
+END
 
--- 3. Insertar una factura
-INSERT INTO Facturas (ClienteID, FechaFactura, ImporteTotal)
-VALUES (1, '2023-10-26', 100.00);
+GO
 
--- 4. Insertar un artículo en la factura
-INSERT INTO Facturas_Articulos (FacturaID, ArticuloID, Cantidad, PrecioUnitario)
-VALUES (1, 1, 2, 25.99);
+-- sp obtener todos los empleados
+CREATE PROCEDURE sp_ObtenerTodosEmpleados
+AS
+BEGIN
+    SELECT *
+    FROM Empleados;
+END
+GO
 
--- 5. Insertar un pago
-INSERT INTO Pagos (FacturaID, ClienteID, Importe, FechaPago, MetodoPago)
-VALUES (1, 1, 100.00, '2023-10-27', 'Tarjeta de Crédito');
+-- sp actualizar empleado
+CREATE PROCEDURE sp_ActualizarEmpleado
+    @EmpleadoID INT,
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @Rol NVARCHAR(30)
+AS
+BEGIN
+    UPDATE Empleados
+    SET Nombre = @Nombre,
+        Apellido = @Apellido,
+        Rol = @Rol
+    WHERE EmpleadoID = @EmpleadoID;
+END
+GO
+-- sp eliminar empleado
+CREATE PROCEDURE sp_EliminarEmpleado
+    @EmpleadoID INT
+AS
+BEGIN
+    DELETE FROM Empleados
+    WHERE EmpleadoID = @EmpleadoID;
+END
+GO
 
--- 6. Obtener todas las facturas de un cliente
-SELECT *
-FROM Facturas
-WHERE ClienteID = 1;
+--  obtener todos los usuarios join empleados
+CREATE PROCEDURE sp_ObtenerTodosUsuarios
+AS
+BEGIN
+    SELECT u.UsuarioID, u.NombreUsuario, u.Rol, e.Nombre, e.Apellido
+    FROM Usuarios u
+    LEFT JOIN Empleados e ON u.UsuarioID = e.EmpleadoID;
+END
+GO
 
--- 7. Obtener el total de una factura específica
-SELECT SUM(fa.Cantidad * fa.PrecioUnitario) AS TotalFactura
-FROM Facturas_Articulos fa
-JOIN Facturas f ON fa.FacturaID = f.FacturaID
-WHERE f.FacturaID = 1;
 
--- 8. Obtener todos los artículos de una factura específica
-SELECT a.*
-FROM Artículos a
-JOIN Facturas_Articulos fa ON a.ArticuloID = fa.ArticuloID
-JOIN Facturas f ON fa.FacturaID = f.FacturaID
-WHERE f.FacturaID = 1;
 
--- 9.  Obtener el listado de facturas por cliente y fechas
-SELECT *
-FROM Facturas
-WHERE ClienteID = 1
-ORDER BY FechaFactura;
+
+-- sp login
+
+
+
+CREATE PROCEDURE sp_Login
+    @NombreUsuario NVARCHAR(50),
+    @Contrasena NVARCHAR(100)
+AS
+BEGIN
+    DECLARE @ContrasenaHash NVARCHAR(255);
+
+    SELECT @ContrasenaHash = ContrasenaHash
+    FROM Usuarios
+    WHERE NombreUsuario = @NombreUsuario;
+
+    IF @ContrasenaHash IS NOT NULL AND HASHBYTES('SHA2_256', @Contrasena) = @ContrasenaHash
+    BEGIN
+        SELECT 'Login exitoso' AS Mensaje;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Nombre de usuario o contrase a incorrectos' AS Mensaje;
+    END
+END
+GO
+
+--  crud sp  clientes
+
+-- crear cliente
+CREATE PROCEDURE sp_CrearCliente
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @Telefono NVARCHAR(20),
+    @Email NVARCHAR(100)
+AS
+BEGIN
+    INSERT INTO Clientes (Nombre, Apellido, Telefono, Email)
+    VALUES (@Nombre, @Apellido, @Telefono, @Email);
+END
+GO
+ --- leer cliente por id
+CREATE PROCEDURE sp_ObtenerClientePorID
+    @ClienteID INT
+AS
+BEGIN
+    SELECT *
+    FROM Clientes
+    WHERE ClienteID = @ClienteID;
+END
+GO
+
+-- leer todos los clientes
+CREATE PROCEDURE sp_ActualizarCliente
+    @ClienteID INT,
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @Telefono NVARCHAR(20),
+    @Email NVARCHAR(100)
+AS
+BEGIN
+    UPDATE Clientes
+    SET Nombre = @Nombre,
+        Apellido = @Apellido,
+        Telefono = @Telefono,
+        Email = @Email
+    WHERE ClienteID = @ClienteID;
+END
+GO
+-- eliminar cliente
+CREATE PROCEDURE sp_EliminarCliente
+    @ClienteID INT
+AS
+BEGIN
+    DELETE FROM Clientes
+    WHERE ClienteID = @ClienteID;
+END
+GO
+
+-- listar todos los clientes
+CREATE PROCEDURE sp_ObtenerTodosClientes
+AS
+BEGIN
+    SELECT *
+    FROM Clientes;
+END
+GO
+
+----------------------------------- michael ---------------------------------------
+
