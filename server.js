@@ -1,20 +1,19 @@
 import express from "express";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
 import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import sql from "mssql";
 
-
+// Configuración necesaria para usar __dirname en módulos ES6 (import)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-// ... resto del código
+
 // 2. CONFIGURACIÓN IMPORTANTE
 app.use(express.json()); // Para que el servidor entienda datos JSON enviados por fetch
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. CONFIGURACIÓN DE TU BASE DE DATOS (Pon tus datos aquí)
+// 3. CONFIGURACIÓN DE TU BASE DE DATOS
 const dbConfig = {
     server: 'localhost',
     database: 'NEOPharmTechDB',
@@ -53,5 +52,5 @@ app.get('/', (req, res) => {
 app.set("port", process.env.PORT || 3000);
 
 app.listen(app.get("port"), () => {
-  console.log(`Server running on => http://localhost:${app.get("port")}`);
+    console.log(`Server running on => http://localhost:${app.get("port")}`);
 });
