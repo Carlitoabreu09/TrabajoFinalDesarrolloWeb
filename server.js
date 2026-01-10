@@ -1,74 +1,55 @@
 import express from "express";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import path from 'path';
-import sql from 'mssql'; // Importamos la librería para SQL Server
+import path, { dirname } from "path";
+import sql from "mssql";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+// ... resto del código
+// 2. CONFIGURACIÓN IMPORTANTE
+app.use(express.json()); // Para que el servidor entienda datos JSON enviados por fetch
+app.use(express.static(path.join(__dirname, 'public')));
 
-// --- CONFIGURACIÓN DE BASE DE DATOS ---
+// 3. CONFIGURACIÓN DE TU BASE DE DATOS (Pon tus datos aquí)
 const dbConfig = {
-    user: 'tu_usuario', // Cambia por tu usuario de SQL
-    password: 'tu_password', // Cambia por tu contraseña
-    server: 'localhost', 
-    database: 'NeoPharmTECH', // Nombre de la base de datos en tu archivo .sql
+    server: 'localhost',
+    database: 'NEOPharmTechDB',
     options: {
         encrypt: false, 
-        trustServerCertificate: true
+        trustServerCertificate: true 
     }
 };
 
-// Middleware para que el servidor entienda datos JSON enviados desde el JS
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// --- RUTAS DE NAVEGACIÓN ---
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-// --- FUNCIONALIDADES DE BASE DE DATOS (Tus módulos) ---
-
-// 1. Buscar Productos (Referencia image_462de3.png)
-app.get('/api/productos/buscar', async (req, res) => {
-    try {
-        let pool = await sql.connect(dbConfig);
-        let result = await pool.request()
-            .input('termino', sql.VarChar, `%${req.query.q}%`)
-            .query('SELECT * FROM Productos WHERE Nombre LIKE @termino OR Codigo LIKE @termino');
-        res.json(result.recordset);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// 2. Agregar Cliente con validación de RNC (Referencia image_462e1f.png)
-app.post('/api/clientes', async (req, res) => {
-    const { nombre, direccion, telefono, rnc } = req.body;
-    
-    // Validación: El RNC es obligatorio para facturas con crédito fiscal
-    if (!rnc) {
-        return res.status(400).json({ error: "El RNC es necesario para comprobantes fiscales." });
-    }
+// 4. RUTA PARA RECIBIR DATOS DESDE PROD.JS
+app.post('/api/productos/agregar', async (req, res) => {
+    const { nombre, proveedor, precio, cantidad } = req.body;
 
     try {
         let pool = await sql.connect(dbConfig);
         await pool.request()
             .input('nombre', sql.VarChar, nombre)
-            .input('dir', sql.VarChar, direccion)
-            .input('tel', sql.VarChar, telefono)
-            .input('rnc', sql.VarChar, rnc)
-            .query('INSERT INTO Clientes (Nombre, Direccion, Telefono, RNC) VALUES (@nombre, @dir, @tel, @rnc)');
-        res.json({ success: true, message: "Cliente guardado" });
+            .input('proveedor', sql.VarChar, proveedor)
+            .input('precio', sql.Decimal, precio)
+            .input('cantidad', sql.Int, cantidad)
+            .query(`INSERT INTO Productos (Nombre, Proveedor, Precio, Cantidad) 
+                    VALUES (@nombre, @proveedor, @precio, @cantidad)`);
+        
+        res.json({ success: true, message: "Producto guardado en la base de datos" });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(err);
+        res.status(500).json({ success: false, message: "Error en el servidor" });
     }
 });
 
-// --- CONFIGURACIÓN DEL PUERTO ---
+// Ruta principal
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); 
+});
+
 app.set("port", process.env.PORT || 3000);
 
 app.listen(app.get("port"), () => {
