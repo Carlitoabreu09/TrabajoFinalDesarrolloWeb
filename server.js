@@ -3,54 +3,61 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import sql from "mssql";
 
-// Configuración necesaria para usar __dirname en módulos ES6 (import)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
 const app = express();
 
-// 2. CONFIGURACIÓN IMPORTANTE
-app.use(express.json()); // Para que el servidor entienda datos JSON enviados por fetch
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 3. CONFIGURACIÓN DE TU BASE DE DATOS
 const dbConfig = {
     server: 'localhost',
     database: 'NEOPharmTechDB',
-    options: {
-        encrypt: false, 
-        trustServerCertificate: true 
-    }
+    options: { encrypt: false, trustServerCertificate: true }
 };
 
-// 4. RUTA PARA RECIBIR DATOS DESDE PROD.JS
-app.post('/api/productos/agregar', async (req, res) => {
-    const { nombre, proveedor, precio, cantidad } = req.body;
+// --- RUTAS DE PRODUCTOS ---
+app.get('/api/productos/listar', async (req, res) => {
+    try {
+        let pool = await sql.connect(dbConfig);
+        let result = await pool.request().query("SELECT ProductoID as id, CodigoBarras as codigo, Nombre as nombre, PrecioVenta as precio, StockActual as cantidad FROM Productos WHERE Activo = 1");
+        res.json(result.recordset);
+    } catch (err) { res.status(500).json(err); }
+});
 
+app.post('/api/productos/agregar', async (req, res) => {
+    const { codigo, nombre, precio, cantidad } = req.body;
     try {
         let pool = await sql.connect(dbConfig);
         await pool.request()
-            .input('nombre', sql.VarChar, nombre)
-            .input('proveedor', sql.VarChar, proveedor)
-            .input('precio', sql.Decimal, precio)
-            .input('cantidad', sql.Int, cantidad)
-            .query(`INSERT INTO Productos (Nombre, Proveedor, Precio, Cantidad) 
-                    VALUES (@nombre, @proveedor, @precio, @cantidad)`);
-        
-        res.json({ success: true, message: "Producto guardado en la base de datos" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: "Error en el servidor" });
-    }
+            .input('CodigoBarras', sql.NVarChar, codigo)
+            .input('Nombre', sql.NVarChar, nombre)
+            .input('PrecioVenta', sql.Decimal, precio)
+            .input('StockInicial', sql.Int, cantidad)
+            .execute('sp_GestionarProducto'); // Usa tu SP de la base de datos
+        res.json({ success: true });
+    } catch (err) { res.status(500).json(err); }
 });
 
-// Ruta principal
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html')); 
+// --- RUTAS DE CLIENTES (NUEVO) ---
+// Nota: Debes crear la tabla 'Clientes' en tu SQL si aún no existe
+app.get('/api/clientes/listar', async (req, res) => {
+    try {
+        let pool = await sql.connect(dbConfig);
+        let result = await pool.request().query("SELECT * FROM Clientes");
+        res.json(result.recordset);
+    } catch (err) { res.status(500).json(err); }
 });
 
-app.set("port", process.env.PORT || 3000);
-
-app.listen(app.get("port"), () => {
-    console.log(`Server running on => http://localhost:${app.get("port")}`);
+app.post('/api/clientes/agregar', async (req, res) => {
+    const { codigo, nombre, direccion, telefono, rnc } = req.body;
+    try {
+        let pool = await sql.connect(dbConfig);
+        await pool.request()
+            .query(`INSERT INTO Clientes (Codigo, Nombre, Direccion, Telefono, RNC) 
+                    VALUES ('${codigo}', '${nombre}', '${direccion}', '${telefono}', '${rnc}')`);
+        res.json({ success: true });
+    } catch (err) { res.status(500).json(err); }
 });
+
+app.listen(3000, () => console.log("Servidor en http://localhost:3000"));

@@ -1,4 +1,4 @@
---- CREACIÓN DE LA BASE DE DATOS
+--- CREACIï¿½N DE LA BASE DE DATOS
 USE master;
 GO
 
@@ -14,9 +14,9 @@ GO
 USE NEOPharmTechDB;
 GO
 
---- CREACIÓN DE TABLAS (En orden de dependencia)
+--- CREACIï¿½N DE TABLAS (En orden de dependencia)
 
--- Tabla Categorías
+-- Tabla Categorï¿½as
 CREATE TABLE Categorias (
     CategoriaID INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(50) NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE DetalleVentas (
 );
 GO
 
---- CREACIÓN DE PROCEDIMIENTOS ALMACENADOS
+--- CREACIï¿½N DE PROCEDIMIENTOS ALMACENADOS
 
 -- SP: Gestionar Producto (Crear o Actualizar)
 CREATE PROCEDURE sp_GestionarProducto
@@ -184,12 +184,25 @@ GO
 --- DATOS DE PRUEBA (SEMILLA)
 
 -- Insertar datos base
-INSERT INTO Categorias (Nombre) VALUES ('Analgésicos'), ('Antibióticos');
-INSERT INTO Proveedores (NombreEmpresa, NombreContacto) VALUES ('Droguería Nacional', 'Juan Perez');
-INSERT INTO Empleados (Nombre, Apellido, Rol) VALUES ('Ana', 'Gomez', 'Farmacéutica');
+INSERT INTO Categorias (Nombre) VALUES ('Analgï¿½sicos'), ('Antibiï¿½ticos');
+INSERT INTO Proveedores (NombreEmpresa, NombreContacto) VALUES ('Droguerï¿½a Nacional', 'Juan Perez');
+INSERT INTO Empleados (Nombre, Apellido, Rol) VALUES ('Ana', 'Gomez', 'Farmacï¿½utica');
 
 -- Insertar producto de prueba
 EXEC sp_GestionarProducto '77001', 'Paracetamol 500mg', 1, 1, 1.50, 3.00, 100, '2026-12-31';
 GO
 
-PRINT '¡Base de datos NEOPharmTech creada exitosamente!';
+PRINT 'ï¿½Base de datos NEOPharmTech creada exitosamente!';
+-- Tabla Clientes
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Clientes')
+BEGIN
+    CREATE TABLE Clientes (
+        ClienteID INT IDENTITY(1,1) PRIMARY KEY,
+        Codigo NVARCHAR(50),
+        Nombre NVARCHAR(100),
+        Direccion NVARCHAR(255),
+        Telefono NVARCHAR(20),
+        RNC NVARCHAR(20)
+    );
+END
+GO
