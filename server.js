@@ -1,5 +1,5 @@
 import express from "express";
-import path, { dirname } from "path";
+import path, { dirname } from "path"; // Solo una vez aquí
 import { fileURLToPath } from "url";
 import sql from "mssql";
 
