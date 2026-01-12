@@ -1,54 +1,36 @@
 <h2 class="text-center mt-4">Agregar Producto</h2>
 
 <div class="container mt-4">
-
-    <!-- Aquí iría tu formulario -->
     <div class="formulario-producto container py-4">
 
-  <!-- Campos del formulario -->
-  <div class="mb-3">
-    <label for="codigo" class="form-label">Código</label>
-    <input type="text" class="form-control input-ovalado" id="codigo" placeholder="Ingrese el código" disabled>
-  </div>
+        <div class="mb-3">
+            <label for="codigoInput" class="form-label">Código</label>
+            <input type="text" class="form-control input-ovalado" id="codigoInput" placeholder="Ingrese el código">
+        </div>
 
-  <div class="mb-3">
-    <label for="nombre" class="form-label">Nombre</label>
-    <input type="text" class="form-control input-ovalado" id="nombre" placeholder="Ingrese el nombre">
-  </div>
+        <div class="mb-3">
+            <label for="nombreInput" class="form-label">Nombre</label>
+            <input type="text" class="form-control input-ovalado" id="nombreInput" placeholder="Ingrese el nombre">
+        </div>
 
-  <div class="mb-3">
-    <label for="direccion" class="form-label">Precio</label>
-    <input type="text" class="form-control input-ovalado" id="direccion" placeholder="Ingrese el precio">
-  </div>
+        <div class="mb-3">
+            <label for="precioInput" class="form-label">Precio</label>
+            <input type="text" class="form-control input-ovalado" id="precioInput" placeholder="Ingrese el precio">
+        </div>
 
-  <div class="mb-3">
-    <label for="telefono" class="form-label">Cantidad</label>
-    <input type="number" class="form-control input-ovalado" id="telefono" placeholder="Ingrese la cantidad">
-  </div>
+        <div class="mb-3">
+            <label for="cantidadInput" class="form-label">Cantidad</label>
+            <input type="number" class="form-control input-ovalado" id="cantidadInput" placeholder="Ingrese la cantidad">
+        </div>
 
-  <div class="mb-3">
-    <label for="rnc" class="form-label">Proveedor</label>
-    <input type="text" class="form-control input-ovalado" id="rnc" placeholder="Ingrese el proveedor">
-  </div>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <button class="btn btn-secondary btn-lg" data-page="/pages/productos.html">
+                ← Regresar
+            </button>
 
-  <!-- Botones: regresar izquierda / agregar derecha -->
-  <div class="d-flex justify-content-between align-items-center mt-4">
-    
-    <!-- Izquierda -->
-
-    <button class="btn btn-secondary btn-lg" data-page="/pages/productos.html">
-      ← Regresar
-    </button>
-
-    <!-- Derecha -->
-    <button class="btn btn-primary btn-lg">
-      Agregar Producto <i class="fa fa-cart-plus"></i>
-    </button>
-    <button id="btnAgregarCliente" class="btn btn-primary">Agregar cliente <i class="fas fa-user-plus"></i></button>
-
-  </div>
-
-</div>
-
-
+            <button id="btnAgregarProducto" class="btn btn-primary btn-lg">
+                Agregar Producto <i class="fa fa-cart-plus"></i>
+            </button>
+        </div>
+    </div>
 </div>
